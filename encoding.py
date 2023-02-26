@@ -14,7 +14,7 @@ if not os.path.exists(output_dir):
 # Iterate through each file in the input directory
 for filename in os.listdir(input_dir):
     # Check if the file is a Word document
-    if filename.endswith('.docx'):
+    if filename.endswith('.docx') and not filename.startswith('~$'):
         # Open the Word document
         doc_path = os.path.join(input_dir, filename)
         doc = Document(doc_path)
