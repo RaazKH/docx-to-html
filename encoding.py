@@ -11,10 +11,16 @@ output_dir = 'html'
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
+# Initialize the list of processed file names
+processed_files = []
+
 # Iterate through each file in the input directory
 for filename in os.listdir(input_dir):
     # Check if the file is a Word document
     if filename.endswith('.docx') and not filename.startswith('~$'):
+        # Add the file name to the list of processed file names
+        processed_files.append(filename)
+
         # Open the Word document
         doc_path = os.path.join(input_dir, filename)
         doc = Document(doc_path)
@@ -51,3 +57,8 @@ for filename in os.listdir(input_dir):
         # Save the HTML string to a file
         with open(html_path, 'w') as file:
             file.write(html_string)
+
+# Write the processed file names to a text file
+with open(os.path.join(output_dir, 'mappings.txt'), 'w') as file:
+    for filename in processed_files:
+        file.write(filename + '\n')
