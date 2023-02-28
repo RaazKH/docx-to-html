@@ -49,25 +49,22 @@ for filename in os.listdir(input_dir):
                 a.tail = paragraph.text.strip()
                 p.append(a)
 
-                # Check if the next paragraph is blank and if the current paragraph is not the last one
+                # Check if the next paragraph is blank, need to remove last class manually
                 if i < len(doc.paragraphs) - 1 and not doc.paragraphs[i+1].text.strip():
                     p.set('class', 'brl-btmmargin')
 
                 # Check if the paragraph is centered and add the appropriate class
                 alignment = paragraph.alignment
                 if alignment == 1:
-                    if 'brl-btmmargin' not in p.attrib:
-                        p.set('class', 'brl-btmmargin')
                     p.set('class', p.attrib.get('class', '') + ' brl-align-center')
+                # Check if the paragraph does not starts with a tab, and add the appropriate class
+                elif not paragraph.text.startswith('\t'):
+                    p.set('class', p.attrib.get('class', '') + ' brl-firstline-noindent')
 
                 body.append(p)
 
                 # Update the variable to check for blank lines
                 prev_text = paragraph.text
-
-        # Remove the "brl-btmmargin" class from the last paragraph, if present
-        if len(body) > 0:
-            body[-1].attrib.pop('class', None)
 
         # Serialize the HTML element to a string
         html_string = etree.tostring(html, encoding='unicode', pretty_print=True)
