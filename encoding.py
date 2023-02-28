@@ -53,6 +53,13 @@ for filename in os.listdir(input_dir):
                 if i < len(doc.paragraphs) - 1 and not doc.paragraphs[i+1].text.strip():
                     p.set('class', 'brl-btmmargin')
 
+                # Check if the paragraph is centered and add the appropriate class
+                alignment = paragraph.alignment
+                if alignment == 1:
+                    if 'brl-btmmargin' not in p.attrib:
+                        p.set('class', 'brl-btmmargin')
+                    p.set('class', p.attrib.get('class', '') + ' brl-align-center')
+
                 body.append(p)
 
                 # Update the variable to check for blank lines
