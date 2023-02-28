@@ -56,10 +56,16 @@ for filename in os.listdir(input_dir):
                 # Check if the paragraph is centered and add the appropriate class
                 alignment = paragraph.alignment
                 if alignment == 1:
-                    p.set('class', p.attrib.get('class', '') + ' brl-align-center')
+                    if 'class' not in p.attrib:
+                        p.set('class', 'brl-align-center')
+                    else:
+                        p.set('class', p.attrib.get('class', '') + ' brl-align-center')
                 # Check if the paragraph does not starts with a tab, and add the appropriate class
                 elif not paragraph.text.startswith('\t'):
-                    p.set('class', p.attrib.get('class', '') + ' brl-firstline-noindent')
+                    if 'class' not in p.attrib:
+                        p.set('class', 'brl-firstline-noindent')
+                    else:
+                        p.set('class', p.attrib.get('class', '') + ' brl-firstline-noindent')
 
                 body.append(p)
 
