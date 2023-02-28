@@ -29,8 +29,11 @@ for filename in os.listdir(input_dir):
         html = etree.Element('html')
         body = etree.SubElement(html, 'body')
 
+        # Initialize the variable to check for blank lines
+        prev_text = ''
+
         # Iterate through each paragraph in the document
-        for paragraph in doc.paragraphs:
+        for i, paragraph in enumerate(doc.paragraphs):
             if paragraph.text.strip():
                 # Check if the paragraph starts with "This document" or "Last Modified"
                 if paragraph.text.strip().startswith('This document') or paragraph.text.strip().startswith('Last Modified'):
@@ -46,7 +49,18 @@ for filename in os.listdir(input_dir):
                 a.tail = paragraph.text.strip()
                 p.append(a)
 
+                # Check if the next paragraph is blank and if the current paragraph is not the last one
+                if i < len(doc.paragraphs) - 1 and not doc.paragraphs[i+1].text.strip():
+                    p.set('class', 'brl-btmmargin')
+
                 body.append(p)
+
+                # Update the variable to check for blank lines
+                prev_text = paragraph.text
+
+        # Remove the "brl-btmmargin" class from the last paragraph, if present
+        if len(body) > 0:
+            body[-1].attrib.pop('class', None)
 
         # Serialize the HTML element to a string
         html_string = etree.tostring(html, encoding='unicode', pretty_print=True)
